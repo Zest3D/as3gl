@@ -17,7 +17,7 @@ package com.as3gl.example
 		
 		public function MyVertexShader() 
 		{
-			var vertex:vec3 = attribute3();
+			var position:vec3 = attribute3();
 			var normal:vec3 = attribute3();
 			var uv1:vec2 = attribute2();
 			var tangent:vec4 = attribute4();
@@ -37,7 +37,7 @@ package com.as3gl.example
 			var t2:vec4 = vec4( div( t0, t1 ) );
 			var t3:vec4 = vec4( sub( tangent, t2 ) );
 			
-			out( vec4( t3 ) );
+			out( t3 );
 			
 			traceStack();
 		}

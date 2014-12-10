@@ -1,5 +1,6 @@
 package com.as3gl.reg 
 {
+	import com.as3gl.sampler.*;
 	
 	/**
 	 * ...
@@ -7,7 +8,7 @@ package com.as3gl.reg
 	 */
 	public interface ISamplerRegister extends IRegister
 	{
-		
+		function get sampler():ISampler;
 	}
 	
 }

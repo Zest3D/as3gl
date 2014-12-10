@@ -18,16 +18,16 @@ package com.as3gl.shader
 		
 		private var _shaderType:ShaderType;
 		
-		private var _varyingMap:Dictionary;
-		private var _varyingPointer:uint;
+		private static var _varyingMap:Dictionary= new Dictionary();
+		private static var _varyingPointer:uint = 0;
 		
 		public function AS3GLShader(shaderType:ShaderType) 
 		{
 			_shaderType = shaderType;
 			_opStack = new Vector.<Operation>();
 			
-			_varyingMap = new Dictionary();
-			_varyingPointer = 0;
+			//_varyingMap = new Dictionary();
+			//_varyingPointer = 0;
 		}
 		
 		public function get shaderType():ShaderType 
@@ -71,7 +71,17 @@ package com.as3gl.shader
 			return vec;
 		}
 		
-		
+		public function getVaryingRegisterByID( id:String ):VRegister
+		{
+			for each( var reg:VRegister in _varyingMap )
+			{
+				if ( reg.name == id )
+				{
+					return reg;
+				}
+			}
+			throw new Error( "Could not find varying register in varying map with id: " + id + ". Check that the register was assigned in the vertex shader." );
+		}
 	}
 
 }

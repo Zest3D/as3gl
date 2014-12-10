@@ -31,8 +31,11 @@ package com.as3gl
 			
 			//var reg:Register = new Register( RegType.FT, 0 );
 			
+			trace( "=== vertex shader ===" );
 			var vShader:MyVertexShader = new MyVertexShader();
-			//var fShader:MyFragmentShader = new MyFragmentShader();
+			trace( "\n=== fragment shader ===" );
+			var fShader:MyFragmentShader = new MyFragmentShader();
+			
 		}
 		
 	}

@@ -1,7 +1,15 @@
 package com.as3gl.example 
 {
 	import com.as3gl.data.types.sampler2D;
+	import com.as3gl.data.types.vec2;
 	import com.as3gl.op.Operation;
+	import com.as3gl.reg.VRegister;
+	import com.as3gl.sampler.AntialiasType;
+	import com.as3gl.sampler.DimensionType;
+	import com.as3gl.sampler.FilterType;
+	import com.as3gl.sampler.MipmapType;
+	import com.as3gl.sampler.TextureFormatType;
+	import com.as3gl.sampler.WrapType;
 	import com.as3gl.shader.AS3GLFragmentShader;
 	
 	/**
@@ -12,7 +20,12 @@ package com.as3gl.example
 	{
 		public function MyFragmentShader()
 		{
-			var u_TexUnit:sampler2D = uniformSampler2D();
+			var tex:sampler2D = uniformSampler2D( 'tex' );
+			var uv:VRegister = getVaryingRegisterByID( 'uv' );
+			
+			texture( tex, uv );
+			
+			traceStack();
 		}
 		
 		private function traceStack():void
