@@ -4,6 +4,7 @@ package com.as3gl.shader
 	import com.as3gl.data.types.sampler2D;
 	import com.as3gl.data.types.vec2;
 	import com.as3gl.data.types.vec4;
+	import com.as3gl.op.MovOp;
 	import com.as3gl.op.Operation;
 	import com.as3gl.op.TexOp;
 	import com.as3gl.reg.FCRegister;
@@ -13,6 +14,7 @@ package com.as3gl.shader
 	import com.as3gl.reg.FTSamplerRegister;
 	import com.as3gl.reg.IRegister;
 	import com.as3gl.reg.ISamplerRegister;
+	import com.as3gl.reg.OCRegister;
 	import com.as3gl.sampler.AntialiasType;
 	import com.as3gl.sampler.DimensionType;
 	import com.as3gl.sampler.FilterType;
@@ -34,7 +36,7 @@ package com.as3gl.shader
 		private var _tempMap:Dictionary;
 		private var _tempPointer:uint;
 		
-		private var _outputRegister:IRegister; //TODO make this a map for MRT
+		private var _outputRegister:OCRegister; //TODO make this a map for MRT
 		
 		public function AS3GLFragmentShader() 
 		{
@@ -71,20 +73,29 @@ package com.as3gl.shader
 			return sampler;
 		}
 		
-		public function texture( sampler:sampler2D, coord:IRegister ):ISamplerRegister
+		public function texture( sampler:sampler2D, coord:IRegister ):ISampler
 		{
-			
 			var temp:sampler2D = tempSampler2D(); // TODO check types and act accordingly
 			var lhsReg:ISamplerRegister =  allocateSamplerRegister( getSamplerRegisterBySampler(temp) );
-			
-			//var texCoord:ISamplerRegister = allocateSamplerRegister( getSamplerRegisterBySampler(temp) );
-			
 			var dest:ISamplerRegister = allocateSamplerRegister( getSamplerRegisterBySampler(sampler) );
 			
 			var op:TexOp = new TexOp( dest, lhsReg, coord );
 			_opStack.push(op);
 			
-			return dest;
+			return temp;
+		}
+		
+		public function out( dest:ISampler ):void
+		{
+			if ( !_outputRegister )
+			{
+				_outputRegister = new OCRegister( new sampler2D( DimensionType.TEXTURE_2D, MipmapType.NOMIP, FilterType.LINEAR,WrapType.REPEAT, AntialiasType.X0, TextureFormatType.RGBA8888 ) );
+			}
+			
+			var destination:IRegister = allocateSamplerRegister( getSamplerRegisterBySampler( dest ) );
+			
+			var op:MovOp = new MovOp( _outputRegister, destination );
+			_opStack.push( op );
 		}
 		
 		public function tempSampler2D():sampler2D
